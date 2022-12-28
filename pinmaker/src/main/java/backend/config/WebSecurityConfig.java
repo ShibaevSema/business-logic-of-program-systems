@@ -69,19 +69,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 /** Разграничение доступа для основного приложения без camunda **/
 
-//               //Доступ только для не зарегистрированных пользователей
-//                .antMatchers(HttpMethod.GET, "/").not().fullyAuthenticated()
-//                .antMatchers(HttpMethod.POST, "/login").permitAll()
-//                .antMatchers(HttpMethod.POST, "/register").permitAll()
-//                .antMatchers(AUTH_WHITELIST).permitAll()
-//                .antMatchers( "/pin-builder/**").hasRole(Role.USER.name())
-//                .antMatchers(ADMIN_ACCESS).hasRole(Role.ADMIN.name())
-//                //Доступ только для авторизованных пользователей
-//                .anyRequest().authenticated();
+               //Доступ только для не зарегистрированных пользователей
+                .antMatchers(HttpMethod.GET, "/").not().fullyAuthenticated()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/register").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers( "/pin-builder/**").hasRole(Role.USER.name())
+                .antMatchers(ADMIN_ACCESS).hasRole(Role.ADMIN.name())
+                //Доступ только для авторизованных пользователей
+                .anyRequest().authenticated();
 
                 /** Для camunda разграничение доступа через spring security отсутствует **/
 
-                .anyRequest().permitAll();
+//                .anyRequest().permitAll();
 
         httpSecurity.headers().frameOptions().sameOrigin();
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
