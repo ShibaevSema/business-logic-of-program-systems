@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/pin-builder")
 public class PhotoController {
 
     private final PhotoUtil photoUtil;
@@ -25,7 +26,7 @@ public class PhotoController {
     /**
      * upload photo for pin - write photo to buffer
      */
-    @RequestMapping(value = "/pin-builder/upload-photo", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "multipart/form-data")
+    @RequestMapping(value = "photos", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "multipart/form-data")
     public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, Long userId) {
         if (file.isEmpty()) {
             log.info("Photo is 0 bite");

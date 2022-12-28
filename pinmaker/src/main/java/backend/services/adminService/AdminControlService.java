@@ -3,7 +3,7 @@ package backend.services.adminService;
 import backend.entities.Board;
 import backend.entities.Pin;
 
-public interface AdminControl {
+public interface AdminControlService {
 
      /**
       * Блокировка конкретного pin пользователя

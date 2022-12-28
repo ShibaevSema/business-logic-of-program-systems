@@ -1,7 +1,7 @@
 package adminTools.services;
 
 
-public interface BlockingUtil {
+public interface BlockingService {
 
      /**
       * Непосредственно блокируем в базе конкретный Pin

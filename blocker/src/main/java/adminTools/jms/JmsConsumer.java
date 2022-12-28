@@ -1,5 +1,6 @@
 package adminTools.jms;
 
+import adminTools.services.BlockingService;
 import adminTools.services.impl.AdminControlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jms.annotation.JmsListener;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JmsConsumer {
 
-    private final AdminControlService adminControlService;
+    private final BlockingService adminControlService;
 
     @JmsListener(destination = "blockUser")
     public void getMessageForBlockingUser(String message) throws Exception {

@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.boardService.impl;
 
 import backend.dto.requests.BoardRequest;
 import backend.entities.Board;
@@ -7,7 +7,8 @@ import backend.exceptions.ApplicationException;
 import backend.exceptions.ErrorEnum;
 import backend.repositories.BoardRepository;
 import backend.repositories.UserRepository;
-import backend.services.adminService.impl.AdminControlService;
+import backend.services.adminService.impl.AdminControlServiceImpl;
+import backend.services.boardService.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,15 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class BoardService {
+public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    private final AdminControlService adminControlService;
+    private final AdminControlServiceImpl adminControlService;
 
     private PlatformTransactionManager transactionManager;
 
-    public Long createBoard(BoardRequest boardRequest) throws Exception {
+    public Long createBoard(BoardRequest boardRequest) {
         Long result;
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("boardTx");

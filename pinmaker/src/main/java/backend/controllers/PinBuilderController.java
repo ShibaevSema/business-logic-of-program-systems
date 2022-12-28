@@ -3,8 +3,10 @@ package backend.controllers;
 
 import backend.dto.requests.PinRequest;
 import backend.dto.responses.PinWithPhotoResponse;
-import backend.services.BoardService;
-import backend.services.PinService;
+import backend.services.boardService.BoardService;
+import backend.services.boardService.impl.BoardServiceImpl;
+import backend.services.pinService.PinService;
+import backend.services.pinService.impl.PinServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/pin-builder")
 public class PinBuilderController {
 
     private final PinService pinService;
@@ -32,7 +35,7 @@ public class PinBuilderController {
      * creating Pin
      */
 
-    @RequestMapping(value = "/pin-builder", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> makePin(@RequestBody PinRequest pin) throws Exception {
         log.info("POST request to create new pin {}", pin);
 
@@ -65,17 +68,17 @@ public class PinBuilderController {
     /**
      * finding all user's pin
      */
-    @RequestMapping(value = "/pin-builder/find-user-pin", method = RequestMethod.GET)
-    public List<PinWithPhotoResponse> getAllUserPin(@RequestParam Long userID) {
-        return pinService.findUserPins(userID);
+    @RequestMapping(value = "user/{id}/pins", method = RequestMethod.GET)
+    public List<PinWithPhotoResponse> getAllUserPins(@PathVariable Long id) {
+        return pinService.findUserPins(id);
     }
 
     /**
      * get all pins of one board
      */
-    @RequestMapping(value = "/pin-builder/find-board-pin", method = RequestMethod.GET)
-    public List<PinWithPhotoResponse> getAllBoardPin(@RequestParam Long boardId) {
-        return pinService.findBoardPins(boardId);
+    @RequestMapping(value = "/board/{id}/pins", method = RequestMethod.GET)
+    public List<PinWithPhotoResponse> getAllBoardPins(@PathVariable Long id) {
+        return pinService.findBoardPins(id);
     }
 
 

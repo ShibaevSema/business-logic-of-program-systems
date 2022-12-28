@@ -7,4 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadPhotoRequest {
     private MultipartFile multipartFile;
     private Long userId;
+
+    public UploadPhotoRequest(){}
 }

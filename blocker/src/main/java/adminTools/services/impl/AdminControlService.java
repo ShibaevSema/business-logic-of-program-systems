@@ -3,7 +3,7 @@ package adminTools.services.impl;
 import adminTools.entities.*;
 import adminTools.jms.JmsProducer;
 import adminTools.repositories.*;
-import adminTools.services.BlockingUtil;
+import adminTools.services.BlockingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AdminControlService implements BlockingUtil {
+public class AdminControlService implements BlockingService {
     private final String QUEUE_BLOCKED_USER_MAIL = "blockUserMail";
     private final String QUEUE_BLOCKED_BOARD_MAIL = "blockBoardMail";
     private final String QUEUE_BLOCKED_PIN_MAIL = "blockPinMail";

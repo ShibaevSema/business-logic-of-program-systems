@@ -1,6 +1,6 @@
 package backend.delegates.mainUserProcess;
 
-import backend.services.BoardService;
+import backend.services.boardService.impl.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FindingBoard implements JavaDelegate {
 
-    private final BoardService boardService;
+    private final BoardServiceImpl boardService;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {

@@ -1,8 +1,10 @@
 package backend.controllers;
 
 import backend.dto.responses.UserResponse;
-import backend.services.adminService.impl.AdminControlService;
-import backend.services.UserService;
+import backend.services.adminService.AdminControlService;
+import backend.services.adminService.impl.AdminControlServiceImpl;
+import backend.services.userService.UserService;
+import backend.services.userService.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static backend.utils.TextUtil.concatenateStrings;
 
 @Slf4j
 @RestController
@@ -35,30 +39,30 @@ public class AdminController {
      * block user - it will block all user's pins and boards
      */
 
-    @RequestMapping(value = "/block-user", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUser(@Valid @RequestBody Long userId) throws Exception {
-        adminService.blockUser(userId);
-        return new ResponseEntity<>("User " + userId + " is blocked", HttpStatus.OK);
+    @RequestMapping(value = "/blocking/user/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> blockUser(@Valid @PathVariable Long id) throws Exception {
+        adminService.blockUser(id);
+        return new ResponseEntity<>(concatenateStrings("User ", String.valueOf(id), " is blocked"), HttpStatus.OK);
     }
 
     /**
      * block user's pin
      */
 
-    @RequestMapping(value = "/block-pin", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUserPin(@Valid @RequestBody Long pinId) throws Exception {
-        adminService.blockUserPin(pinId);
-        return new ResponseEntity<>("Pin " + pinId + " is blocked", HttpStatus.OK);
+    @RequestMapping(value = "/blocking/pin/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> blockUserPin(@Valid @PathVariable Long id) throws Exception {
+        adminService.blockUserPin(id);
+        return new ResponseEntity<>(concatenateStrings("Pin ", String.valueOf(id)," is blocked"), HttpStatus.OK);
     }
 
     /**
      * block user's board - it will block all user's pins on this board
      */
 
-    @RequestMapping(value = "/block-board", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUserBoard(@Valid @RequestBody Long boardId) throws Exception {
-        adminService.blockUserBoard(boardId);
-        return new ResponseEntity<>("Board " + boardId + " is blocked", HttpStatus.OK);
+    @RequestMapping(value = "/blocking/board/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> blockUserBoard(@Valid @PathVariable Long id) throws Exception {
+        adminService.blockUserBoard(id);
+        return new ResponseEntity<>(concatenateStrings("Board ", String.valueOf(id), " is blocked"), HttpStatus.OK);
     }
 
 

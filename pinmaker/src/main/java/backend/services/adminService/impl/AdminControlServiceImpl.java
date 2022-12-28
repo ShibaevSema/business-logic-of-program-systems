@@ -6,7 +6,6 @@ import backend.exceptions.ErrorEnum;
 import backend.jms.JmsProducer;
 import backend.repositories.CheckBoardRepository;
 import backend.repositories.CheckPinRepository;
-import backend.services.adminService.AdminControl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AdminControlService implements AdminControl {
+public class AdminControlServiceImpl implements backend.services.adminService.AdminControlService {
 
     private final String QUEUE_USER_NAME = "blockUser";
     private final String QUEUE_BOARD_NAME = "blockBoard";

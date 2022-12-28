@@ -1,12 +1,12 @@
 package backend.dto.requests;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
-@Builder
 public class UserDto {
     private String email;
     private String password;
     private String age;
+
+    public UserDto(){}
 }

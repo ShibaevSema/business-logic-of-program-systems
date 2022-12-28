@@ -3,7 +3,7 @@ package backend.delegates.mainAdminProcess;
 import backend.dto.requests.LoginRequest;
 import backend.dto.responses.LoginResponse;
 import backend.models.Role;
-import backend.services.UserService;
+import backend.services.userService.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LoginAdmin implements JavaDelegate {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -22,10 +22,11 @@ public class LoginAdmin implements JavaDelegate {
         String password = (String) delegateExecution.getVariable("password");
         long adminId = -1;
 
-        LoginResponse loginResponse = userService.login(LoginRequest.builder().
-                email(email).
-                password(password).
-                build());
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setEmail(email);
+        loginRequest.setPassword(password);
+
+        LoginResponse loginResponse = userService.login(loginRequest);
         adminId = loginResponse.getUser().getId();
 
 

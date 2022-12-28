@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.userService.impl;
 
 import backend.dto.mappers.UserMapper;
 import backend.dto.requests.LoginRequest;
@@ -14,6 +14,7 @@ import backend.repositories.BoardRepository;
 import backend.repositories.PinRepository;
 import backend.repositories.UserRepository;
 import backend.security.JwtUtil;
+import backend.services.userService.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
@@ -103,7 +104,7 @@ public class UserService {
         return usersList;
     }
 
-    private List<BoardResponseDto> getUserBoards(Long userId) {
+    public List<BoardResponseDto> getUserBoards(Long userId) {
         List<Board> boards = boardRepository.findAllByUser_Id(userId);
 
         List<BoardResponseDto> boardList = new ArrayList<>();

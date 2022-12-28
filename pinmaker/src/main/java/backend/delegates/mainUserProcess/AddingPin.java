@@ -1,7 +1,7 @@
 package backend.delegates.mainUserProcess;
 
 import backend.dto.requests.PinRequest;
-import backend.services.PinService;
+import backend.services.pinService.impl.PinServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AddingPin implements JavaDelegate {
 
-    private final PinService pinService;
+    private final PinServiceImpl pinService;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -23,15 +23,16 @@ public class AddingPin implements JavaDelegate {
         Long userId = (long) delegateExecution.getVariable("userId");
         String fileName = (String) delegateExecution.getVariable("fileName");
 
-        pinService.createPin(PinRequest.builder()
-                .name(name)
-                .board_id(boardId)
-                .description(description)
-                .alt_text(altText)
-                .link(link)
-                .userId(userId)
-                .fileName(fileName)
-                .build());
+        PinRequest pinRequest = new PinRequest();
+        pinRequest.setName(name);
+        pinRequest.setBoard_id(boardId);
+        pinRequest.setDescription(description);
+        pinRequest.setAlt_text(altText);
+        pinRequest.setLink(link);
+        pinRequest.setUserId(userId);
+        pinRequest.setFileName(fileName);
+
+        pinService.createPin(pinRequest);
     }
 
 }

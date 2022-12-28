@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.pinService.impl;
 
 import backend.dto.requests.PinRequest;
 import backend.dto.responses.PinWithPhotoResponse;
@@ -12,7 +12,9 @@ import backend.repositories.BoardRepository;
 import backend.repositories.PhotoRepository;
 import backend.repositories.PinRepository;
 import backend.repositories.UserRepository;
-import backend.services.adminService.impl.AdminControlService;
+import backend.services.adminService.impl.AdminControlServiceImpl;
+import backend.services.pinService.PinService;
+import backend.services.userService.impl.UserServiceImpl;
 import backend.utils.PhotoUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class PinService {
+public class PinServiceImpl implements PinService {
     private final static String PATH_TO_PHOTO_BUFFER = "photoBuffer/";
     private final static String PATH_TO_PERMANENT_STORAGE = "userPhotos/";
 
@@ -39,8 +41,8 @@ public class PinService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    private final UserService userService;
-    private final AdminControlService adminControlService;
+    private final UserServiceImpl userService;
+    private final AdminControlServiceImpl adminControlService;
 
     private final PhotoUtil photoIO;
 
