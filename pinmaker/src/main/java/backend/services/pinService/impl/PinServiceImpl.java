@@ -18,6 +18,7 @@ import backend.services.pinService.PinService;
 import backend.services.userService.UserService;
 import backend.services.userService.impl.UserServiceImpl;
 import backend.utils.PhotoUtil;
+import backend.utils.converters.DtoConvertor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,8 @@ public class PinServiceImpl implements PinService {
     private final PhotoUtil photoIO;
 
     private PlatformTransactionManager transactionManager;
+
+    private final DtoConvertor dtoConvertor;
 
     public void createPin(PinRequest pinRequest) throws Exception {
 
@@ -88,7 +91,7 @@ public class PinServiceImpl implements PinService {
              * загружаем пин в базу
              */
 
-            Pin pin = toPinEntity(pinRequest, photo);
+            Pin pin = dtoConvertor.convertPinDtoToEntity(pinRequest, photo);
 
             Board board = boardRepository.
                     findBoardsByIdAndUser_Id(pinRequest.getBoard_id(), pinRequest.getUserId());
@@ -141,17 +144,6 @@ public class PinServiceImpl implements PinService {
     }
 
 
-    private Pin toPinEntity(PinRequest pinRequest, Photo photo) throws IOException {
-        Pin pin = new Pin();
-        pin.setName(pinRequest.getName());
-        pin.setDescription(pinRequest.getDescription());
-        pin.setAltText(pinRequest.getAlt_text());
-        pin.setLink(pinRequest.getLink());
-        pin.set_blocked(false);
-        pin.setPhoto(photo);
-
-        return pin;
-    }
 
     private Photo toPhotoEntity(String file_name) {
         Photo photo = new Photo();

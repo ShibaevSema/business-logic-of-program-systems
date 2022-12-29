@@ -15,6 +15,8 @@ import backend.repositories.PinRepository;
 import backend.repositories.UserRepository;
 import backend.security.JwtUtil;
 import backend.services.userService.UserService;
+import backend.utils.converters.DtoConvertor;
+import backend.utils.converters.EntityConvertor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,10 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private final DtoConvertor dtoConvertor;
+
+    private final EntityConvertor entityConvertor;
+
     public boolean checkUser(String email) {
         return userRepository.findUserByEmail(email) != null;
     }
@@ -54,14 +60,8 @@ public class UserServiceImpl implements UserService {
         if (checkUser(userDto.getEmail())) {
             return false;
         }
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setAge(userDto.getAge());
-        user.setRole(Role.USER);
-        user.set_blocked(false);
+        User user = dtoConvertor.convertUserDtoToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         try {
             userRepository.save(user);
         } catch (Exception e) {
@@ -93,52 +93,17 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAllUsers();
 
-        List<UserResponse> usersList = new ArrayList<>();
-        for (User user : users) {
-            UserResponse userResponse = new UserResponse();
-            userResponse.setId(user.getId());
-            userResponse.setEmail(user.getEmail());
-            userResponse.setAge(user.getAge());
-            userResponse.setBoards(getUserBoards(user.getId()));
-            usersList.add(userResponse);
-        }
-
-        return usersList;
+        return entityConvertor.convertListUserToListDto(users);
     }
 
     public List<BoardResponseDto> getUserBoards(Long userId) {
         List<Board> boards = boardRepository.findAllByUser_Id(userId);
-
-        List<BoardResponseDto> boardList = new ArrayList<>();
-        for (Board board : boards) {
-            BoardResponseDto boardResponseDto = new BoardResponseDto();
-            boardResponseDto.setId(board.getId());
-            boardResponseDto.setName(board.getName());
-            boardResponseDto.setPins(getBoardPins(board.getId()));
-            boardResponseDto.set_blocked(board.is_blocked());
-            boardList.add(boardResponseDto);
-        }
-
-        return boardList;
+        return entityConvertor.convertListBoardToListDto(boards);
     }
 
     public List<PinResponseDto> getBoardPins(Long boardId) {
         List<Pin> pins = pinRepository.findAllByBoard_Id(boardId);
-
-        List<PinResponseDto> pinList = new ArrayList<>();
-        for (Pin pin : pins) {
-            PinResponseDto pinResponseDto = new PinResponseDto();
-            pinResponseDto.setId(pin.getId());
-            pinResponseDto.setName(pin.getName());
-            pinResponseDto.setDescription(pin.getDescription());
-            pinResponseDto.setAltText(pin.getAltText());
-            pinResponseDto.setLink(pin.getLink());
-            pinResponseDto.setOriginalFileName(pin.getPhoto().getOriginalFileName());
-            pinResponseDto.set_blocked(pin.is_blocked());
-            pinList.add(pinResponseDto);
-        }
-
-        return pinList;
+        return entityConvertor.convertListPinToListDto(pins);
     }
 
     public Role getUserRole(Long id) {
