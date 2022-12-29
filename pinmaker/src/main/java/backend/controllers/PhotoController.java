@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import backend.exceptions.ErrorEnum;
 import backend.utils.PhotoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,22 +29,21 @@ public class PhotoController {
      */
     @RequestMapping(value = "photos", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "multipart/form-data")
     public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, Long userId) {
-        if (file.isEmpty()) {
-            log.info("Photo is 0 bite");
-            return new ResponseEntity<>("Error: photo is 0 bite", HttpStatus.BAD_REQUEST);
-        }
-        if (file.getSize() > MBYTE_20) {
-            log.info("Photo is so big. Size is " + file.getSize() + " bite");
-            return new ResponseEntity<>("Error: photo is so big !", HttpStatus.BAD_REQUEST);
-        }
-
+        validateFile(file);
         String file_name = photoUtil.generateFileName(file.getOriginalFilename(), file.getContentType());
-
         photoUtil.putPhoto(PATH_TO_PHOTO_BUFFER, file_name, file);
-
-        log.info("Photo has been uploaded");
         return new ResponseEntity<>(file_name, HttpStatus.CREATED);
     }
 
+    private void validateFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            log.info("Photo is 0 bite");
+            throw ErrorEnum.EMPTY_FILE.exception();
+        }
+        if (file.getSize() > MBYTE_20) {
+            log.info("Photo is so big. Size is " + file.getSize() + " bite");
+            throw ErrorEnum.TOO_BIG_FILE.exception();
+        }
+    }
 
 }

@@ -11,6 +11,8 @@ import backend.services.adminService.impl.AdminControlServiceImpl;
 import backend.services.boardService.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -33,6 +35,12 @@ public class BoardServiceImpl implements BoardService {
     private PlatformTransactionManager transactionManager;
 
     public Long createBoard(BoardRequest boardRequest) {
+
+        if (!findBoard(boardRequest.getName(), boardRequest.getUserId())) {
+            log.info("Board name is not unique");
+            throw ErrorEnum.NOT_UNIQUE_NAME.exception();
+        }
+
         Long result;
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("boardTx");

@@ -1,5 +1,6 @@
 package backend.dto.requests;
 
+import backend.exceptions.ErrorEnum;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,5 +15,14 @@ public class PinRequest {
     private Long userId;
     private String fileName;
 
-    public PinRequest(){};
+    public PinRequest() {
+    }
+
+    public void validate() {
+        if (this.board_id == null)
+            throw ErrorEnum.NULL_BOARD_NAME.exception();
+
+        if (this.fileName == null || this.fileName.trim().isEmpty())
+            throw ErrorEnum.PHOTO_NOT_UPLOADED.exception();
+    }
 }

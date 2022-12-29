@@ -13,7 +13,9 @@ import backend.repositories.PhotoRepository;
 import backend.repositories.PinRepository;
 import backend.repositories.UserRepository;
 import backend.services.adminService.impl.AdminControlServiceImpl;
+import backend.services.boardService.BoardService;
 import backend.services.pinService.PinService;
+import backend.services.userService.UserService;
 import backend.services.userService.impl.UserServiceImpl;
 import backend.utils.PhotoUtil;
 import lombok.AllArgsConstructor;
@@ -41,7 +43,8 @@ public class PinServiceImpl implements PinService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
+    private final BoardService boardService;
     private final AdminControlServiceImpl adminControlService;
 
     private final PhotoUtil photoIO;
@@ -49,6 +52,9 @@ public class PinServiceImpl implements PinService {
     private PlatformTransactionManager transactionManager;
 
     public void createPin(PinRequest pinRequest) throws Exception {
+
+        if (boardService.findBoardById(pinRequest.getBoard_id(), pinRequest.getUserId()))
+            throw ErrorEnum.OBJECT_DOES_NOT_EXIST.exception();
 
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("pinTx");
@@ -168,7 +174,6 @@ public class PinServiceImpl implements PinService {
         }
         return photos;
     }
-
 
 
 }
