@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EntityConvertor {
 
-    private final UserService userService;
 
     public List<UserResponse> convertListUserToListDto(List<User> users) {
         return users.stream().map(this::convertUserToDto).collect(Collectors.toList());
@@ -29,7 +28,6 @@ public class EntityConvertor {
         userResponse.setId(user.getId());
         userResponse.setEmail(user.getEmail());
         userResponse.setAge(user.getAge());
-        userResponse.setBoards(userService.getUserBoards(user.getId()));
         return userResponse;
     }
 
@@ -37,7 +35,6 @@ public class EntityConvertor {
         BoardResponseDto boardResponseDto = new BoardResponseDto();
         boardResponseDto.setId(board.getId());
         boardResponseDto.setName(board.getName());
-        boardResponseDto.setPins(userService.getBoardPins(board.getId()));
         boardResponseDto.set_blocked(board.is_blocked());
         return boardResponseDto;
     }
