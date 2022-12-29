@@ -23,6 +23,8 @@ public enum ErrorEnum {
 
     OBJECT_DOES_NOT_EXIST(404, "Объект не был найден"),
 
+    OBJECTS_DOES_NOT_EXIST(404, "Объекты не были найдены"),
+
     NOT_UNIQUE_NAME(400,"Имя не уникально, а должно быть"),
 
     EMPTY_FILE(400,"Файл пустой"),

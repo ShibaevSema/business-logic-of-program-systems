@@ -55,6 +55,10 @@ public class BoardServiceImpl implements BoardService {
 
             Board board = toBoardEntity(boardRequest);
             User user = userRepository.findUserById(boardRequest.getUserId());
+
+            if(user==null)
+                throw ErrorEnum.OBJECT_DOES_NOT_EXIST.exception();
+
             user.addBoardToUser(board);
             try {
                 board = boardRepository.save(board);

@@ -92,7 +92,8 @@ public class UserServiceImpl implements UserService {
 
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAllUsers();
-
+        if(users.isEmpty())
+            throw ErrorEnum.OBJECTS_DOES_NOT_EXIST.exception();
         List<UserResponse> usersResponse = entityConvertor.convertListUserToListDto(users);
         usersResponse.stream().forEach((x) -> x.setBoards(getUserBoards(x.getId())));
         return usersResponse;
@@ -100,7 +101,6 @@ public class UserServiceImpl implements UserService {
 
     public List<BoardResponseDto> getUserBoards(Long userId) {
         List<Board> boards = boardRepository.findAllByUser_Id(userId);
-
         List<BoardResponseDto> boardsResponse = entityConvertor.convertListBoardToListDto(boards);
         boardsResponse.stream().forEach((x) -> x.setPins(getBoardPins(x.getId())));
         return boardsResponse;

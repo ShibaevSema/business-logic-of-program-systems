@@ -81,7 +81,13 @@ public class PinServiceImpl implements PinService {
             Board board = boardRepository.
                     findBoardsByIdAndUser_Id(pinRequest.getBoard_id(), pinRequest.getUserId());
 
+            if (board == null)
+                throw ErrorEnum.OBJECT_DOES_NOT_EXIST.exception();
+
             User user = userRepository.findUserById(pinRequest.getUserId());
+
+            if (user == null)
+                throw ErrorEnum.OBJECT_DOES_NOT_EXIST.exception();
 
             pin.setBoard(board);
             pin.setUser(user);
@@ -92,7 +98,7 @@ public class PinServiceImpl implements PinService {
                 pin = pinRepository.save(pin);
             } catch (Exception e) {
                 log.error("Unexpected Error {}", e.getMessage());
-                new ApplicationException(ErrorEnum.SERVICE_DATA_BASE_EXCEPTION.createApplicationError());
+                throw new ApplicationException(ErrorEnum.SERVICE_DATA_BASE_EXCEPTION.createApplicationError());
             }
 
             log.info("created new pin");
@@ -113,7 +119,7 @@ public class PinServiceImpl implements PinService {
 
     public List<PinWithPhotoResponse> findUserPins(Long id) {
         if (userService.findUser(id)) {
-            return Collections.emptyList();
+            throw ErrorEnum.OBJECT_DOES_NOT_EXIST.exception();
         }
         return pinToDTO(pinRepository.findAllByUser_Id(id));
     }
@@ -126,7 +132,6 @@ public class PinServiceImpl implements PinService {
     public boolean findPin(Long id) {
         return pinRepository.findPinById(id) != null;
     }
-
 
 
     private List<PinWithPhotoResponse> pinToDTO(List<Pin> pins) {
