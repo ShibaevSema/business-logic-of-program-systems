@@ -2,7 +2,6 @@ package backend.utils.converters;
 
 import backend.dto.requests.PinRequest;
 import backend.dto.requests.UserDto;
-import backend.entities.Photo;
 import backend.entities.Pin;
 import backend.entities.User;
 import backend.models.Role;
@@ -21,14 +20,13 @@ public class DtoConvertor {
         return user;
     }
 
-    public Pin convertPinDtoToEntity(PinRequest pinRequest, Photo photo) {
+    public Pin convertPinDtoToEntity(PinRequest pinRequest) {
         Pin pin = new Pin();
         pin.setName(pinRequest.getName());
         pin.setDescription(pinRequest.getDescription());
         pin.setAltText(pinRequest.getAlt_text());
         pin.setLink(pinRequest.getLink());
         pin.set_blocked(false);
-        pin.setPhoto(photo);
         return pin;
     }
 

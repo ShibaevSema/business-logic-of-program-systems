@@ -1,7 +1,6 @@
 package backend.dto.responses;
 
 import backend.entities.Board;
-import backend.entities.Photo;
 import backend.entities.User;
 import lombok.Builder;
 import lombok.Data;

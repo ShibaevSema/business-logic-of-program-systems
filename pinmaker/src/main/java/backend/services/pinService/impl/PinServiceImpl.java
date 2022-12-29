@@ -3,20 +3,17 @@ package backend.services.pinService.impl;
 import backend.dto.requests.PinRequest;
 import backend.dto.responses.PinWithPhotoResponse;
 import backend.entities.Board;
-import backend.entities.Photo;
 import backend.entities.Pin;
 import backend.entities.User;
 import backend.exceptions.ApplicationException;
 import backend.exceptions.ErrorEnum;
 import backend.repositories.BoardRepository;
-import backend.repositories.PhotoRepository;
 import backend.repositories.PinRepository;
 import backend.repositories.UserRepository;
 import backend.services.adminService.impl.AdminControlServiceImpl;
 import backend.services.boardService.BoardService;
 import backend.services.pinService.PinService;
 import backend.services.userService.UserService;
-import backend.services.userService.impl.UserServiceImpl;
 import backend.utils.PhotoUtil;
 import backend.utils.converters.DtoConvertor;
 import lombok.AllArgsConstructor;
@@ -40,7 +37,6 @@ public class PinServiceImpl implements PinService {
     private final static String PATH_TO_PERMANENT_STORAGE = "userPhotos/";
 
     private final PinRepository pinRepository;
-    private final PhotoRepository photoRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
@@ -74,24 +70,13 @@ public class PinServiceImpl implements PinService {
             photoIO.savePhoto(PATH_TO_PERMANENT_STORAGE, photoByte, pinRequest.getFileName());
             photoIO.deletePhoto(PATH_TO_PHOTO_BUFFER, pinRequest.getFileName());
 
-            /**
-             * загружаем информацию о фотографии в базу
-             */
-
-            Photo photo = toPhotoEntity(pinRequest.getFileName());
-
-            try {
-                photo = photoRepository.save(photo);
-            } catch (Exception e) {
-                log.error("Unexpected Error {}", e.getMessage());
-                new ApplicationException(ErrorEnum.SERVICE_DATA_BASE_EXCEPTION.createApplicationError());
-            }
 
             /**
              * загружаем пин в базу
              */
 
-            Pin pin = dtoConvertor.convertPinDtoToEntity(pinRequest, photo);
+
+            Pin pin = dtoConvertor.convertPinDtoToEntity(pinRequest);
 
             Board board = boardRepository.
                     findBoardsByIdAndUser_Id(pinRequest.getBoard_id(), pinRequest.getUserId());
@@ -100,7 +85,6 @@ public class PinServiceImpl implements PinService {
 
             pin.setBoard(board);
             pin.setUser(user);
-            pin.setPhoto(photo);
             user.addPinToUser(pin);
             board.addPinToBoard(pin);
 
@@ -145,12 +129,6 @@ public class PinServiceImpl implements PinService {
 
 
 
-    private Photo toPhotoEntity(String file_name) {
-        Photo photo = new Photo();
-        photo.setOriginalFileName(file_name);
-        return photo;
-    }
-
     private List<PinWithPhotoResponse> pinToDTO(List<Pin> pins) {
 
         List<PinWithPhotoResponse> photos = new ArrayList<>();
@@ -161,7 +139,7 @@ public class PinServiceImpl implements PinService {
             photo.setDescription(pin.getDescription());
             photo.setAltText(pin.getAltText());
             photo.setLink(pin.getLink());
-            photo.setPhoto(pin.getPhoto().getOriginalFileName());
+            photo.setPhoto(pin.getOriginalFileName());
             photos.add(photo);
         }
         return photos;

@@ -49,7 +49,7 @@ public class EntityConvertor {
         pinResponseDto.setDescription(pin.getDescription());
         pinResponseDto.setAltText(pin.getAltText());
         pinResponseDto.setLink(pin.getLink());
-        pinResponseDto.setOriginalFileName(pin.getPhoto().getOriginalFileName());
+        pinResponseDto.setOriginalFileName(pin.getOriginalFileName());
         pinResponseDto.set_blocked(pin.is_blocked());
         return pinResponseDto;
     }
