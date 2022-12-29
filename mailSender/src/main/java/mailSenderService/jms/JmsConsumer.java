@@ -35,31 +35,30 @@ public class JmsConsumer {
 
     @JmsListener(destination = "blockUserMail")
     public void getMessageForBlockingUser(String message) throws Exception {
-        NewMailDto newMailDto = new NewMailDto();
-        newMailDto.setEmailTo(message);
-        newMailDto.setSubject(blockUserLetterTheme);
-        newMailDto.setMessageBody(blockUserLetterBody);
+        NewMailDto newMailDto = makeNewMailDto(message,blockUserLetterTheme,blockUserLetterBody);
         log.info("Mail was sent to email " + message);
         mailSenderService.sendEmail(newMailDto);
     }
 
     @JmsListener(destination = "blockBoardMail")
     public void getMessageForBlockingBoard(String message) throws Exception {
-        NewMailDto newMailDto = new NewMailDto();
-        newMailDto.setEmailTo(message);
-        newMailDto.setSubject(blockBoardLetterTheme);
-        newMailDto.setMessageBody(blockBoardLetterBody);
+        NewMailDto newMailDto = makeNewMailDto(message,blockBoardLetterTheme,blockBoardLetterTheme);
         log.info("Mail was sent to email " + message);
         mailSenderService.sendEmail(newMailDto);
     }
 
     @JmsListener(destination = "blockPinMail")
     public void getMessageForBlockingPin(String message) throws Exception {
-        NewMailDto newMailDto = new NewMailDto();
-        newMailDto.setEmailTo(message);
-        newMailDto.setSubject(blockPinLetterTheme);
-        newMailDto.setMessageBody(blockPinLetterBody);
+        NewMailDto newMailDto = makeNewMailDto(message,blockPinLetterTheme,blockPinLetterBody);
         log.info("Mail was sent to email " + message);
         mailSenderService.sendEmail(newMailDto);
+    }
+
+    private NewMailDto makeNewMailDto(String message, String theme, String body){
+        NewMailDto newMailDto = new NewMailDto();
+        newMailDto.setEmailTo(message);
+        newMailDto.setSubject(theme);
+        newMailDto.setMessageBody(body);
+        return newMailDto;
     }
 }

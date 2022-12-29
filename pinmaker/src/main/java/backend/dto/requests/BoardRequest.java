@@ -1,7 +1,6 @@
 package backend.dto.requests;
 
 import backend.exceptions.ErrorEnum;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

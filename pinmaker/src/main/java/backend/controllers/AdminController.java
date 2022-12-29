@@ -2,9 +2,7 @@ package backend.controllers;
 
 import backend.dto.responses.UserResponse;
 import backend.services.adminService.AdminControlService;
-import backend.services.adminService.impl.AdminControlServiceImpl;
 import backend.services.userService.UserService;
-import backend.services.userService.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,8 +37,8 @@ public class AdminController {
      * block user - it will block all user's pins and boards
      */
 
-    @RequestMapping(value = "/blocking/user/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUser(@Valid @PathVariable Long id) throws Exception {
+    @PutMapping(value = "/blocking/user/{id}")
+    public ResponseEntity<String> blockUser(@Valid @PathVariable Long id) {
         adminService.blockUser(id);
         return new ResponseEntity<>(concatenateStrings("User ", String.valueOf(id), " is blocked"), HttpStatus.OK);
     }
@@ -49,8 +47,8 @@ public class AdminController {
      * block user's pin
      */
 
-    @RequestMapping(value = "/blocking/pin/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUserPin(@Valid @PathVariable Long id) throws Exception {
+    @PutMapping(value = "/blocking/pin/{id}")
+    public ResponseEntity<String> blockUserPin(@Valid @PathVariable Long id)  {
         adminService.blockUserPin(id);
         return new ResponseEntity<>(concatenateStrings("Pin ", String.valueOf(id)," is blocked"), HttpStatus.OK);
     }
@@ -59,8 +57,8 @@ public class AdminController {
      * block user's board - it will block all user's pins on this board
      */
 
-    @RequestMapping(value = "/blocking/board/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> blockUserBoard(@Valid @PathVariable Long id) throws Exception {
+    @PutMapping(value = "/blocking/board/{id}")
+    public ResponseEntity<String> blockUserBoard(@Valid @PathVariable Long id)  {
         adminService.blockUserBoard(id);
         return new ResponseEntity<>(concatenateStrings("Board ", String.valueOf(id), " is blocked"), HttpStatus.OK);
     }

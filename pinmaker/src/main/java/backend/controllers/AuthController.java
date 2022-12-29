@@ -4,7 +4,6 @@ import backend.dto.mappers.UserMapper;
 import backend.dto.requests.LoginRequest;
 import backend.dto.requests.UserDto;
 import backend.dto.responses.LoginResponse;
-import backend.exceptions.ErrorEnum;
 import backend.repositories.UserRepository;
 import backend.services.userService.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +20,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-    private final UserMapper userMapper;
-    private final UserRepository userRepository;
 
     /**
      * register user
      */
 
-    @RequestMapping(value = "/register", consumes = "application/json", produces = "application/json", method = {RequestMethod.OPTIONS, RequestMethod.POST})
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@Valid @RequestBody UserDto user) {
         user.validate();
         boolean isSaved = userService.addUser(user);
@@ -41,7 +38,7 @@ public class AuthController {
      * login user
      */
 
-    @RequestMapping(value = "/login", consumes = "application/json", method = {RequestMethod.OPTIONS, RequestMethod.POST})
+    @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
             LoginResponse loginResponse = userService.login(loginRequest);
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
